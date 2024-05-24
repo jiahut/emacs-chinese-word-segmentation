@@ -7,11 +7,12 @@
 
 ## changelog
 
-1. 修复直接指定program
+1. 直接指定program
 2. 更好的适配 evil
+   - word object
+   - w/e 自动跳过空行
 
-
-## 在evil 模式适配
+## 配置 ( 配合evil-mode)
 
 ``` elisp
 (use-package emacs
