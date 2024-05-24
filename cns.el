@@ -93,8 +93,8 @@
 (defvar cns-cmdproxy-shell-path
   (if (string-match-p "cmdproxy.exe$" shell-file-name)
       (if (executable-find "wsl.exe")
-          "wsl.exe bash"
-        "C:/cygwin64/bin/bash.exe")
+          "C:/Users/zhijia.zhang/scoop/shims/bash.exe"
+        "C:/Users/zhijia.zhang/scoop/shims/bash.exe")
     nil)
   "Login shell that support '-c EXPR' argument on WSL or Cygwin.
 This variable is only required on Windows.")
@@ -179,12 +179,7 @@ There should be three files in the directory:
 On Windows NT, run the word segmentation process via WSL or
 Cygwin platform."
   (setq cns-process-shell-command
-        (if (string-match-p "cmdproxy.exe$" shell-file-name)
-            (format "%s -l -c '%s %s'"
-                    cns-cmdproxy-shell-path
-                    cns-prog
-                    (cns-set-prog-args cns-dict-directory))
-          (format "%s %s" cns-prog (cns-set-prog-args cns-dict-directory)))))
+          (format "%s %s" cns-prog (cns-set-prog-args cns-dict-diectory))))
 
 (defun cns-segmentation-filter (proc output)
   "Get word segmentation result and set `cns-segmentation'.

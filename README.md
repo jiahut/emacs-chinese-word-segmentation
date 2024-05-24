@@ -1,5 +1,30 @@
-
 # emacs-chinese-word-segmentation
+
+## changelog
+
+1. 适配到使用scoop
+
+## 在evil 模式适配
+
+``` elisp
+(use-package emacs
+  :after evil
+  :config
+  (add-to-list 'load-path "c:/emacs-chinese-word-segmentation")
+  (setq cns-prog "c:/emacs-chinese-word-segmentation/cnws.exe")
+  (setq cns-dict-diectory "c:/emacs-chinese-word-segmentation/cppjieba/dict")
+
+  (setq cns-recent-segmentation-limit 20) ; default is 10
+  (setq cns-debug t) ; disable debug output, default is t
+  (require 'cns nil t)
+  (when (featurep 'cns)
+    (add-hook 'find-file-hook 'cns-auto-enable))
+
+  (define-key evil-normal-state-map (kbd "w") #'cns-forward-word)
+  (define-key evil-normal-state-map (kbd "b") #'cns-backward-word)
+  )
+```
+
 
 基于 [结巴分词](https://github.com/yanyiwu/cppjieba) 的 Emacs 中文分词
 工具，实现了以中文词语为单位的移动和编辑。支持 Linux、Cygwin、Windows
