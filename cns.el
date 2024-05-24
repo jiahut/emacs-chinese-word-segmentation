@@ -179,7 +179,7 @@ There should be three files in the directory:
 On Windows NT, run the word segmentation process via WSL or
 Cygwin platform."
   (setq cns-process-shell-command
-          (format "%s %s" cns-prog (cns-set-prog-args cns-dict-diectory))))
+          (format "%s %s" cns-prog (cns-set-prog-args cns-dict-directory))))
 
 (defun cns-segmentation-filter (proc output)
   "Get word segmentation result and set `cns-segmentation'.
