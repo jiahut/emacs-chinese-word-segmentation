@@ -5,11 +5,13 @@
     "Move the cursor to the beginning of the next word using cns."
     :type exclusive
     (evil-signal-at-bob-or-eob count)
-    (cns-forward-word (or count 1))
-    (when (eolp)
-      (evil-next-line)
-      (evil-first-non-blank)
-      ))
+    (let ((orig (point)))
+      (cns-forward-word (or count 1))
+      ;; 这里的边界值需要加1
+      (when (and (eolp) (= (point) (+ orig 1)))
+        (evil-next-line)
+        (evil-first-non-blank)
+        )))
 
   (evil-define-motion cns-evil-backward-word-begin (count &optional bigword)
     "Move the cursor to the beginning of the previous word using cns."
