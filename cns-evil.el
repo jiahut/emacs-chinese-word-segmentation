@@ -10,8 +10,7 @@
       ;; 这里的边界值需要加1
       (when (and (eolp) (= (point) (+ orig 1)))
         (evil-next-line)
-        (evil-first-non-blank)
-        )))
+        (evil-first-non-blank))))
 
   (evil-define-motion cns-evil-backward-word-begin (count &optional bigword)
     "Move the cursor to the beginning of the previous word using cns."
@@ -25,18 +24,18 @@
 
   (evil-define-motion cns-evil-forward-word-end (count &optional bigword)
     "Move the cursor to the end of the next word using cns."
-    :type inclusive
+    :type exclusive
     (evil-signal-at-bob-or-eob count)
     (cns-forward-word count)
-    (unless (eolp)
-      (forward-char))
+    ;; (unless (eolp)
+    ;;   (forward-char))
     (when (eolp)
       (evil-next-line)
       (evil-first-non-blank)))
 
   (evil-define-motion cns-evil-backward-word-end (count &optional bigword)
     "Move the cursor to the end of the previous word using cns."
-    :type inclusive
+    :type exclusive
     (let ((orig (point)))
       (evil-signal-at-bob-or-eob (- (or count 1)))
       (cns-backward-word (or count 1))
@@ -44,13 +43,34 @@
         (unless (bobp)
           (backward-word)))))
 
+  ;; (evil-define-text-object cns-evil-a-word (count &optional beg end type)
+  ;;   "Select a word using cns."
+  ;;   (evil-select-an-object 'evil-word beg end type count))
+
+  ;; (evil-define-text-object cns-evil-inner-word (count &optional beg end type)
+  ;;   "Select inner word using cns."
+  ;;   (evil-select-inner-object 'evil-word beg end type count))
   (evil-define-text-object cns-evil-a-word (count &optional beg end type)
-    "Select a word using cns."
-    (evil-select-an-object 'evil-word beg end type count))
+    "Select a word including leading/trailing whitespace using cns."
+    (evil-range
+     (progn
+       (cns-evil-backward-word-begin count)
+       (point))
+     (progn
+       (cns-evil-forward-word-end count)
+       (- (point) 1))
+     type))
 
   (evil-define-text-object cns-evil-inner-word (count &optional beg end type)
-    "Select inner word using cns."
-    (evil-select-inner-object 'evil-word beg end type count))
+    "Select inner word excluding leading/trailing whitespace using cns."
+    (evil-range
+     (progn
+       (cns-evil-backward-word-begin count)
+       (point))
+     (progn
+       (cns-evil-forward-word-end count)
+       (- (point) 1))
+     type))
 
   (define-key evil-outer-text-objects-map "w" 'cns-evil-a-word)
   (define-key evil-inner-text-objects-map "w" 'cns-evil-inner-word)
